@@ -1,0 +1,1309 @@
+openapi: 3.0.0
+info:
+  title: Invoice API
+  description: This is the API for Zoho Invoice
+  contact: {}
+  version: 1.0.0
+servers:
+  - url: 'https://invoice.zoho.com/api/v3'
+tags:
+  - name: items
+    description: Items Module
+  - name: contacts
+    description: Contacts Module
+parameters:
+  organization_id:
+    in: query
+    name: organization_id
+    type: integer
+    required: false
+paths:
+  /items:
+    get:
+      tags:
+        - items
+      summary: List items
+      description: Get the list of all active items with pagination
+      parameters:
+        - $ref: '#/parameters/organization_id'
+        - name: name
+          in: query
+          description: >-
+            Search items by name. (Maximum length [100]. Variants:
+            name_startswith and name_contains)
+          required: false
+          schema:
+            type: string
+        - name: description
+          in: query
+          description: >-
+            Search items by description. (Maximum length [100]. Variants:
+            description_startswith and description_contains)
+          required: false
+          schema:
+            type: string
+        - name: rate
+          in: query
+          description: >-
+            Search items by rate. (Variants: rate_less_than, rate_less_equals,
+            rate_greater_than and rate_greater_equals)
+          required: false
+          schema:
+            type: integer
+        - name: tax_id
+          in: query
+          description: Search items by tax id.
+          required: false
+          schema:
+            type: integer
+        - name: filter_by
+          in: query
+          description: >-
+            Filter items by status. (Allowed Values: Status.All, Status.Active
+            and Status.Inactive)
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              default: All
+              enum:
+                - All
+                - Active
+                - Inactive
+        - name: search_text
+          in: query
+          description: 'Search items by name or description. (Maximum length [100])'
+          required: false
+          schema:
+            type: string
+        - name: sort_column
+          in: query
+          description: 'Sort items. (Allowed Values: name, rate and tax_name)'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              default: Name
+              enum:
+                - Name
+                - Rate
+                - Tax_name
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.settings.READ
+    post:
+      tags:
+        - items
+      summary: Create an Item
+      description: Create a new item
+      requestBody:
+        description: Item that needs to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.settings.CREATE
+      parameters: []
+  '/items/{item_id}':
+    get:
+      tags:
+        - items
+      summary: Retrieve an item
+      description: Fetch details of an existing item
+      parameters:
+        - name: item_id
+          in: path
+          description: ID of the item to be fetched
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.settings.READ
+    put:
+      tags:
+        - items
+      summary: Update an item
+      description: Update the details of an existing item
+      parameters:
+        - name: item_id
+          in: path
+          description: ID of the item to be updated
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Item that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.settings.UPDATE
+    delete:
+      tags:
+        - items
+      summary: Delete an item
+      description: >-
+        Delete an existing item. Items that are part of a transaction cannot be
+        deleted
+      parameters:
+        - name: item_id
+          in: path
+          description: ID of the item to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.settings.DELETE
+  '/items/{item_id}/active':
+    post:
+      tags:
+        - items
+      summary: Mark as active
+      description: Mark an inactive item as active
+      parameters:
+        - name: item_id
+          in: path
+          description: ID of the item to be marked active
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.settings.CREATE
+  '/items/{item_id}/inactive':
+    post:
+      tags:
+        - items
+      summary: Mark as inactive
+      description: Mark an active item as inactive
+      parameters:
+        - name: item_id
+          in: path
+          description: ID of the item to be marked inactive
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.settings.CREATE
+  /contacts:
+    get:
+      tags:
+        - contacts
+      summary: List Contacts
+      description: List all contacts with pagination.
+      parameters:
+        - name: contact_name_startswith
+          in: query
+          description: 'Search contacts by contact name. Maximum length [100]'
+          required: false
+          schema:
+            type: string
+        - name: contact_name_contains
+          in: query
+          description: 'Search contacts by contact name. Maximum length [100]'
+          required: false
+          schema:
+            type: string
+        - name: company_name_startswith
+          in: query
+          description: 'Search contacts by company name. Maximum length [100]'
+          required: false
+          schema:
+            type: string
+        - name: company_name_contains
+          in: query
+          description: 'Search contacts by company name. Maximum length [100]'
+          required: false
+          schema:
+            type: string
+        - name: first_name_startswith
+          in: query
+          description: >-
+            Search contacts by first name of the contact person. Maximum length
+            [100]
+          required: false
+          schema:
+            type: string
+        - name: first_name_contains
+          in: query
+          description: >-
+            Search contacts by first name of the contact person. Maximum length
+            [100]
+          required: false
+          schema:
+            type: string
+        - name: last_name_startswith
+          in: query
+          description: >-
+            Search contacts by last name of the contact person. Maximum length
+            [100]
+          required: false
+          schema:
+            type: string
+        - name: last_name_contains
+          in: query
+          description: >-
+            Search contacts by last name of the contact person. Maximum length
+            [100]
+          required: false
+          schema:
+            type: string
+        - name: address_startswith
+          in: query
+          description: 'Search contacts by any of the address fields. Maximum length [100]'
+          required: false
+          schema:
+            type: string
+        - name: address_contains
+          in: query
+          description: 'Search contacts by any of the address fields. Maximum length [100]'
+          required: false
+          schema:
+            type: string
+        - name: email_startswith
+          in: query
+          description: >-
+            Search contacts by email id of the contact person. Maximum length
+            [100]
+          required: false
+          schema:
+            type: string
+        - name: email_contains
+          in: query
+          description: >-
+            Search contacts by email id of the contact person. Maximum length
+            [100]
+          required: false
+          schema:
+            type: string
+        - name: phone_startswith
+          in: query
+          description: >-
+            Search contacts by phone number of the contact person. Maximum
+            length [100]
+          required: false
+          schema:
+            type: string
+        - name: phone_contains
+          in: query
+          description: >-
+            Search contacts by phone number of the contact person. Maximum
+            length [100]
+          required: false
+          schema:
+            type: string
+        - name: filter_by
+          in: query
+          description: >-
+            Filter contacts by status. Allowed Values: Status.All,
+            Status.Active, Status.Inactive, Status.Duplicate and Status.Crm
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              default: All
+              enum:
+                - All
+                - Active
+                - Inactive
+                - Duplicate
+                - Crm
+        - name: search_text
+          in: query
+          description: 'Search contacts by contact name or notes. Maximum length [100]'
+          required: false
+          schema:
+            type: string
+        - name: sort_column
+          in: query
+          description: >-
+            Sort contacts. Allowed Values: contact_name, first_name, last_name,
+            email, outstanding_receivable_amount, created_time and
+            last_modified_time
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              default: contact_name
+              enum:
+                - contact_name
+                - first_name
+                - last_name
+                - email
+                - outstanding_receivable_amount
+                - created_time
+                - last_modified_time
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.READ
+    post:
+      tags:
+        - contacts
+      summary: Create a Contact
+      description: Create a contact with given information.
+      requestBody:
+        description: Contact that needs to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+      parameters: []
+  '/contacts/{contact_id}':
+    delete:
+      tags:
+        - contacts
+      summary: Delete a Contact
+      description: Delete an existing Contact.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.DELETE
+  '/contacts/{contacts_id}':
+    get:
+      tags:
+        - contacts
+      summary: Get a Contact
+      description: Get details of a Contact.
+      parameters:
+        - name: contacts_id
+          in: path
+          description: ID of the contact to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.READ
+  '/contact/{contact_id}/active':
+    post:
+      tags:
+        - contacts
+      summary: Mark as Active
+      description: Mark a contact as active.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to be marked active
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{contact_id}/inactive':
+    post:
+      tags:
+        - contacts
+      summary: Mark as Inactive
+      description: Mark a contact as inactive.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to be marked inactive
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{contact_id}/portal/enable':
+    post:
+      tags:
+        - contacts
+      summary: Enable Portal Access
+      description: Enable Portal Access for a Contact.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to which the portal should be enabled
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Contacts to which portal needs to be enabled
+        content:
+          multipart/form-data:
+            schema:
+              type: array
+              properties: {}
+              description: Person/Individual who represents a company
+              items:
+                properties:
+                  contact_person_id:
+                    type: integer
+                    description: The ID of the contact person
+                    format: int64
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  /clientreviews:
+    get:
+      tags:
+        - contacts
+      summary: View All Client Reviews
+      description: View the list of all client reviews for a particular contact.
+      parameters:
+        - name: contact_id
+          in: query
+          description: Unique ID of a particular contact
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.READ
+  '/clientreviews/{comment_id}':
+    get:
+      tags:
+        - contacts
+      summary: Details of a Particular Client Review
+      description: View the details of a particular client review.
+      parameters:
+        - name: comment_id
+          in: path
+          description: ID of the client review to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: contact_id
+          in: query
+          description: Unique ID of a particular contact
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.READ
+  '/clientreviews/{comment_id}/comment':
+    post:
+      tags:
+        - contacts
+      summary: Reply a Client Review
+      description: Send a reply to a client's review.
+      parameters:
+        - name: comment_id
+          in: path
+          description: ID of the client review to be replied
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: contact_id
+          in: query
+          description: Unique ID of a particular contact
+          required: false
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                description:
+                  type: string
+                  description: A short note on the purpose/reason for the credit note
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{contact_id}/paymentreminder/enable':
+    post:
+      tags:
+        - contacts
+      summary: Enable Payment Reminders
+      description: Enable automated payment reminders for a contact.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to which payment reminder is to be enabled
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{contact_id}/paymentreminder/disable':
+    post:
+      tags:
+        - contacts
+      summary: Disable Payment Reminders
+      description: Disable automated payment reminders for a contact.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to which payment reminder is to be disabled
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{contact_id}/statements/email':
+    get:
+      tags:
+        - contacts
+      summary: Get Statement Mail Content
+      description: Get the mail content of a contacts billing statement.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact whose statement mail content is to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: start_date
+          in: query
+          description: >-
+            If start_date and end_date are not given, current month's statement
+            will be sent to contact. Date format [yyyy-mm-dd]
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          description: 'End date for the statement. Date format [yyyy-mm-dd]'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.READ
+    post:
+      tags:
+        - contacts
+      summary: Email Statement
+      description: >-
+        Email statement to the contact. If JSONString is not inputted, mail will
+        be sent with the default mail content.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to which statement is to be mailed
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: start_date
+          in: query
+          description: >-
+            If start_date and end_date are not given, current month's statement
+            will be sent to contact. Date format [yyyy-mm-dd]
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          description: 'End date for the statement. Date format [yyyy-mm-dd]'
+          required: false
+          schema:
+            type: string
+        - name: multipart_or_formdata
+          in: query
+          description: Files to be attached along with the statement
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                to_mail_ids:
+                  type: array
+                  description: Array of email addresses of the recipients
+                  items:
+                    type: string
+                subject:
+                  type: string
+                  description: >-
+                    Subject of an email that has to be sent. Maximum length to
+                    be allowed [1000]
+                cc_mail_ids:
+                  type: array
+                  description: Array of email addresses of the recipients to be CC'd
+                  items:
+                    type: string
+                body:
+                  type: string
+                  description: 'Body/Content of the email to be sent. Maximum length [5000]'
+                send_from_org_email_id:
+                  type: boolean
+                  description: >-
+                    Boolean to trigger the email from the orgainzation's email
+                    address
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{contact_id}/email':
+    post:
+      tags:
+        - contacts
+      summary: Email Contact
+      description: Send email to contact.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact to which email is to be sent
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: send_customer_statement
+          in: query
+          description: Send customer statement pdf with email
+          required: false
+          schema:
+            type: boolean
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                to_mail_ids:
+                  type: string
+                  description: Array of email addresses of the recipients
+                attachments:
+                  description: >-
+                    Files to be attached to the email. It has to be sent in
+                    multipart/formdata
+                subject:
+                  type: string
+                  description: >-
+                    Subject of an email that has to be sent. Maximum length
+                    [1000]
+                body:
+                  type: string
+                  description: 'Body/content of the email to be sent. Maximum length [5000]'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{contact_id}/comments':
+    get:
+      tags:
+        - contacts
+      summary: List Comments
+      description: List recent activities of a contact.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact whose recent activities are to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.READ
+  '/contacts/{:contact_id}/address':
+    get:
+      tags:
+        - contacts
+      summary: Get Contact Addresses
+      description: >-
+        Get addresses of a contact including its Shipping Address, Billing
+        Address and other additional addresses.
+      parameters:
+        - name: ':contact_id'
+          in: path
+          description: ID of the contact whose contact addresses are to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.READ
+    post:
+      tags:
+        - contacts
+      summary: Add Additional Address
+      description: Add an additional address for a contact using the arguments below.
+      parameters:
+        - name: ':contact_id'
+          in: path
+          description: ID of the contact to which additional address is to be added
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+  '/contacts/{:contact_id}/address/{:address_id}':
+    put:
+      tags:
+        - contacts
+      summary: Edit Additional Address
+      description: Edit the additional address of a contact using the arguments below.
+      parameters:
+        - name: ':contact_id'
+          in: path
+          description: ID of the contact whose additional address is to be edited
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: ':address_id'
+          in: path
+          description: ID of the additional address which is to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.UPDATE
+    delete:
+      tags:
+        - contacts
+      summary: Delete Additional Address
+      description: Delete the additional address of a contact.
+      parameters:
+        - name: ':contact_id'
+          in: path
+          description: ID of the contact whose additional address is to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: ':address_id'
+          in: path
+          description: ID of the additional address which is to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.DELETE
+  '/contacts/{contact_id}/refunds':
+    get:
+      tags:
+        - contacts
+      summary: List Refunds
+      description: List the refund history of a contact.
+      parameters:
+        - name: contact_id
+          in: path
+          description: ID of the contact whose refund history is to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content: {}
+      deprecated: false
+      security:
+        - Zoho_Auth:
+            - ZohoInvoice.contacts.CREATE
+components:
+  schemas:
+    ItemTaxPreferences:
+      type: object
+      properties:
+        tax_id:
+          type: integer
+          description: ID of the tax to be associated to the item
+          format: int64
+    Item:
+      required:
+        - name
+        - rate
+      type: object
+      properties:
+        unit:
+          type: string
+          description: 'Quantifying the amount of an item, using a measurement unit'
+        product_type:
+          type: string
+          description: Specify the type of an item. It can be either goods or service
+        rate:
+          type: integer
+          description: Per unit price of an item
+          format: int64
+        custom_fields:
+          $ref: '#/components/schemas/ItemCustomFields'
+        hsn_or_sac:
+          type: string
+          description: HSN Code
+        name:
+          type: string
+          description: 'Name of the item. Maximum length of the name [100]'
+        item_tax_preferences:
+          $ref: '#/components/schemas/ItemTaxPreferences'
+        description:
+          type: string
+          description: >-
+            Description for the item. Maximum characters to be used for
+            describing the item [2000]
+        sku:
+          type: string
+          description: >-
+            SKU or the Stock Keeping Unit value of an item, should be unique
+            throughout the product
+        tax_id:
+          type: integer
+          description: Id of the tax to be associated to the item.
+          format: int64
+        is_taxable:
+          type: boolean
+          description: >-
+            (India, US and CA Edition only) Boolean to track the taxability of
+            the item
+        tax_exemption_id:
+          type: integer
+          description: 'ID of the tax exemption applied. Mandatory, if is_taxable is false.'
+          format: int64
+    Address:
+      type: object
+      properties:
+        zip:
+          type: integer
+          description: Zip code of the customer's address
+          format: int64
+        country:
+          type: string
+          description: Country of the customer's address
+        address:
+          type: string
+          description: 'Billing address of the contact. (Maximum length allowed [500])'
+        city:
+          type: string
+          description: City of the customer's address
+        attention:
+          type: string
+        street2:
+          type: string
+        state:
+          type: string
+          description: State of the customer's address
+        state_code:
+          type: string
+        fax:
+          type: integer
+          description: Customer's fax number
+          format: int64
+    ContactCustomFields:
+      type: object
+      properties:
+        index:
+          type: integer
+          description: Index of the custom field. It can hold any value from 1 to 10.
+          format: int32
+        value:
+          type: string
+          description: Value of the custom field.
+    ItemCustomFields:
+      type: object
+      properties:
+        customfield_id:
+          type: integer
+          description: The unique ID for the custom field.
+          format: int64
+    ContactPerson:
+      type: object
+      properties:
+        phone:
+          type: string
+          description: Phone number of the contact person
+        mobile:
+          type: string
+          description: Mobile number of the contact person
+        last_name:
+          type: string
+          description: 'Last name of the contact. (Maximum length [100])'
+        contact_person_id:
+          type: integer
+          description: The ID of the contact person
+          format: int64
+        salutation:
+          type: string
+          description: Salutation for the contact
+        first_name:
+          type: string
+          description: 'First name of the contact. (Maximum length [100])'
+        email:
+          type: string
+          description: The Email ID of the contact person
+    DefaultTemplates:
+      type: object
+      properties:
+        invoice_email_template_id:
+          type: integer
+          description: ID of the invoice email template used
+          format: int64
+        creditnote_email_template_id:
+          type: integer
+          description: ID of the credit note email template used
+          format: int64
+        creditnote_template_name:
+          type: string
+          description: Name of the credit not template used
+        invoice_template_id:
+          type: integer
+          description: ID of the invoice template used
+          format: int64
+        invoice_template_name:
+          type: string
+          description: Name of the invoice template used
+        estimate_template_id:
+          type: integer
+          description: ID of the estimate template used
+          format: int64
+        estimate_template_name:
+          type: string
+          description: Name of the estimate template used
+        invoice_email_template_name:
+          type: string
+          description: Name of the invoice email template used
+        estimate_email_template_id:
+          type: integer
+          description: ID of the estimate email template used
+          format: int64
+        creditnote_template_id:
+          type: integer
+          description: ID of the credit note template used
+          format: int64
+        estimate_email_template_name:
+          type: string
+          description: Name of the estimate email template used
+    Contact:
+      required:
+        - contact_name
+      type: object
+      properties:
+        notes:
+          type: string
+          description: Comments about the payment made by the contact
+        tax_authority_id:
+          type: integer
+          description: >-
+            (US and CA edition only) ID of the tax authority. Tax authority
+            depends on the location of the customer. For example, if the
+            customer is located in NY, then the tax authority is NY tax
+            authority.
+          format: int64
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        default_templates:
+          $ref: '#/components/schemas/DefaultTemplates'
+        payment_terms:
+          type: integer
+          description: Net payment term for the customer
+          format: int64
+        avatax_use_code:
+          type: string
+          description: >-
+            (Avalara integration only) Used to group like customers for
+            exemption purposes. It is a custom value that links customers to a
+            tax rule. Select from Avalara [standard codes][1] or enter a custom
+            code.
+        language_code:
+          type: string
+          description: >-
+            Language of a contact. Allowed values (de, en, es, fr, it, ja, nl,
+            pt, sv, zh)
+        twitter:
+          type: string
+          description: 'Twitter account of the contact. Maximum length [100]'
+        gst_no:
+          type: string
+          description: >-
+            (Indian Edition only) 15 digit GST identification number of the
+            customer/vendor.
+        avatax_exempt_no:
+          type: string
+          description: >-
+            (Avalara integration only) Excemption certificate number of the
+            customer
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        place_of_contact:
+          type: string
+          description: >-
+            Location of the contact. (This node identifies the place of supply
+            and source of supply when invoices/bills are raised for the
+            customer/vendor respectively. This is not applicable for Overseas
+            contacts)
+        contact_persons:
+          $ref: '#/components/schemas/ContactPerson'
+        tax_exemption_code:
+          type: string
+          description: >-
+            (US, Canada, Australia and India editions only) Enter tax exemption
+            code
+        gst_treatment:
+          type: string
+          description: >-
+            (Indian Edition only) Choose whether the contact is GST registered
+            /unregistered /consumer /overseas. Allowed values are business_gst,
+            business_none, overseas, consumer.
+        contact_name:
+          type: string
+          description: >-
+            Name of the contact. This can be the name of an organisation or the
+            name of an individual. (Maximum length [200])
+        website:
+          type: string
+          description: Website of the contact
+        tax_authority_name:
+          type: string
+          description: Enter tax authority name
+        custom_fields:
+          $ref: '#/components/schemas/ContactCustomFields'
+        facebook:
+          type: string
+          description: 'Facebook profile account of the contact. (Maximum length [100])'
+        vat_reg_no:
+          type: string
+          description: >-
+            (UK Edition $ Avalara integration only) For UK Edition: VAT
+            Registration number of a contact with VAT treatment as
+            eu_vat_registered. Length should be between 2 and 12
+            characters.(This node is only available for EU VAT registered
+            contacts.) For Avalara: If you are doing sales in the European Union
+            (EU) then provide VAT Registration Number of your customers here.
+            This is used to calculate VAT for B2B sales, from Avalara.
+        tax_exemption_id:
+          type: integer
+          description: '(India, US and CA edition only) ID of the tax exemption'
+          format: int64
+        tax_id:
+          type: integer
+          description: >-
+            (India, US and CA edition only) ID of the tax or tax group that can
+            be collected from the contact. Tax can be given only if is_taxable
+            is true.
+          format: int64
+        country_code:
+          type: string
+          description: >-
+            (UK Edition $ Avalara integration only) For UK Edition: Two letter
+            country code of a contact with VAT treatment as
+            eu_vat_registered.(This node is only available for EU VAT registered
+            contacts.) For Avalara: Two letter country code for the customer
+            country, if your customer is not in US. Refer [AvaTax Codes for
+            Countries and States][2].
+        vat_treatment:
+          type: string
+          description: >-
+            (UK Edition only) VAT treatment of the contact.Allowed Values: uk,
+            eu_vat_not_registered, eu_vat_registered and non_eu.
+        company_name:
+          type: string
+          description: 'Name of the contact''s company.(Maximum length [200])'
+        currency_id:
+          type: integer
+          description: Currency ID of the customer's currency
+          format: int64
+        is_taxable:
+          type: boolean
+          description: >-
+            (India, US and CA edition only) Boolean to track the taxability of
+            the customer
+  securitySchemes:
+    Zoho_Auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'https://accounts.zoho.com/oauth/v2/auth'
+          #tokenUrl: 'https://accounts.zoho.com/oauth/v2/token'
+          scopes:
+            ZohoInvoice.settings.CREATE: Create Items
+            ZohoInvoice.settings.READ: Fetch Items
+            ZohoInvoice.settings.UPDATE: Update Items
+            ZohoInvoice.settings.DELETE: Delete Items
+            ZohoInvoice.contacts.CREATE: Create Contacts
+            ZohoInvoice.contacts.READ: Fetch Contacts
+            ZohoInvoice.contacts.UPDATE: Update Contacts
+            ZohoInvoice.contacts.DELETE: Delete Contacts
+  links: {}
+  callbacks: {}
+security: []
