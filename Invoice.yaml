@@ -126,6 +126,7 @@ paths:
       summary: Retrieve an item
       description: Fetch details of an existing item
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: item_id
           in: path
           description: ID of the item to be fetched
@@ -146,6 +147,7 @@ paths:
       summary: Update an item
       description: Update the details of an existing item
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: item_id
           in: path
           description: ID of the item to be updated
@@ -175,6 +177,7 @@ paths:
         Delete an existing item. Items that are part of a transaction cannot be
         deleted
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: item_id
           in: path
           description: ID of the item to be deleted
@@ -196,6 +199,7 @@ paths:
       summary: Mark as active
       description: Mark an inactive item as active
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: item_id
           in: path
           description: ID of the item to be marked active
@@ -217,6 +221,7 @@ paths:
       summary: Mark as inactive
       description: Mark an active item as inactive
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: item_id
           in: path
           description: ID of the item to be marked inactive
@@ -238,6 +243,7 @@ paths:
       summary: List Contacts
       description: List all contacts with pagination.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_name_startswith
           in: query
           description: 'Search contacts by contact name. Maximum length [100]'
@@ -417,6 +423,7 @@ paths:
       summary: Delete a Contact
       description: Delete an existing Contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to be deleted
@@ -439,6 +446,7 @@ paths:
       summary: Get a Contact
       description: Get details of a Contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contacts_id
           in: path
           description: ID of the contact to be fetched
@@ -461,6 +469,7 @@ paths:
       summary: Mark as Active
       description: Mark a contact as active.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to be marked active
@@ -483,6 +492,7 @@ paths:
       summary: Mark as Inactive
       description: Mark a contact as inactive.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to be marked inactive
@@ -505,6 +515,7 @@ paths:
       summary: Enable Portal Access
       description: Enable Portal Access for a Contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to which the portal should be enabled
@@ -542,6 +553,7 @@ paths:
       summary: View All Client Reviews
       description: View the list of all client reviews for a particular contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: query
           description: Unique ID of a particular contact
@@ -564,6 +576,7 @@ paths:
       summary: Details of a Particular Client Review
       description: View the details of a particular client review.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: comment_id
           in: path
           description: ID of the client review to be fetched
@@ -593,6 +606,7 @@ paths:
       summary: Reply a Client Review
       description: Send a reply to a client's review.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: comment_id
           in: path
           description: ID of the client review to be replied
@@ -631,6 +645,7 @@ paths:
       summary: Enable Payment Reminders
       description: Enable automated payment reminders for a contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to which payment reminder is to be enabled
@@ -653,6 +668,7 @@ paths:
       summary: Disable Payment Reminders
       description: Disable automated payment reminders for a contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to which payment reminder is to be disabled
@@ -675,6 +691,7 @@ paths:
       summary: Get Statement Mail Content
       description: Get the mail content of a contacts billing statement.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact whose statement mail content is to be fetched
@@ -712,6 +729,7 @@ paths:
         Email statement to the contact. If JSONString is not inputted, mail will
         be sent with the default mail content.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to which statement is to be mailed
@@ -783,6 +801,7 @@ paths:
       summary: Email Contact
       description: Send email to contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact to which email is to be sent
@@ -832,6 +851,7 @@ paths:
       summary: List Comments
       description: List recent activities of a contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact whose recent activities are to be fetched
@@ -856,6 +876,7 @@ paths:
         Get addresses of a contact including its Shipping Address, Billing
         Address and other additional addresses.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: ':contact_id'
           in: path
           description: ID of the contact whose contact addresses are to be fetched
@@ -877,6 +898,7 @@ paths:
       summary: Add Additional Address
       description: Add an additional address for a contact using the arguments below.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: ':contact_id'
           in: path
           description: ID of the contact to which additional address is to be added
@@ -905,6 +927,7 @@ paths:
       summary: Edit Additional Address
       description: Edit the additional address of a contact using the arguments below.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: ':contact_id'
           in: path
           description: ID of the contact whose additional address is to be edited
@@ -939,6 +962,7 @@ paths:
       summary: Delete Additional Address
       description: Delete the additional address of a contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: ':contact_id'
           in: path
           description: ID of the contact whose additional address is to be deleted
@@ -968,6 +992,7 @@ paths:
       summary: List Refunds
       description: List the refund history of a contact.
       parameters:
+        - $ref: '#/parameters/organization_id'
         - name: contact_id
           in: path
           description: ID of the contact whose refund history is to be fetched
